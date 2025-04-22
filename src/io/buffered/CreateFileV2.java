@@ -16,6 +16,7 @@ public class CreateFileV2 {
         byte[] buffer = new byte[BUFFER_SIZE];
         int bufferIndex = 0;
 
+        // 버퍼가 가득 차면 쓰고, 버퍼를 비운다
         for(int i=0; i<FILE_SIZE;i++){
             buffer[bufferIndex++] = 1;
             if(bufferIndex==BUFFER_SIZE){
@@ -23,6 +24,8 @@ public class CreateFileV2 {
                 bufferIndex=0;
             }
         }
+
+        // 끝 부분에 오면 버퍼가 가득차지 않고 남아있으 수 있다. 버퍼에 남은 부분 쓰기
         if(bufferIndex>0){
             fos.write(buffer,0,bufferIndex);
         }
