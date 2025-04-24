@@ -1,14 +1,14 @@
-package network.tcp.v1;
+package network.tcp.v2;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
 import static util.MyLogger.log;
 
-public class ClientV1 {
+public class ClientV2 {
 
     private static final int PORT = 12345;
 
@@ -22,15 +22,24 @@ public class ClientV1 {
 
         log("소캣 연결: "+socket);
 
-        // 서버에게 문자 보내기
+        Scanner sc = new Scanner(System.in);
+        while(true){
+            System.out.print("전송 문자: ");
+            String toSend = sc.nextLine();
 
-        String toSend = "Hello";
-        output.writeUTF(toSend);
-        log("cline -> server:"+toSend);
+            // 서버에게 문자 보내기
+            output.writeUTF(toSend);
+            log("client -> server: "+toSend);
 
-        // 서버로부터 문자 받기
-        String received = input.readUTF();
-        log("client <- server: "+received);
+            if(toSend.equals("exit")){
+                break;
+            }
+
+            // 서버로부터 문자 받기
+            String received = input.readUTF();
+            log("client <- server: "+ received);
+        }
+
 
         // 자원 정리
         log("연결 종료: "+socket);

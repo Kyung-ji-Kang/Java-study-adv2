@@ -1,4 +1,4 @@
-package network.tcp.v1;
+package network.tcp.v2;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -8,7 +8,7 @@ import java.net.Socket;
 
 import static util.MyLogger.log;
 
-public class ServerV1 {
+public class ServerV2 {
     private static final int PORT = 12345;
 
     public static void main(String[] args) throws IOException {
@@ -21,14 +21,22 @@ public class ServerV1 {
         DataInputStream input = new DataInputStream(socket.getInputStream());
         DataOutputStream output = new DataOutputStream(socket.getOutputStream());
 
-        // 클라이언트로부터 문자 받기
-        String received = input.readUTF();
-        log("client -> server : "+ received);
+       while (true){
 
-        // 클라이언트에게 문자 보내기
-        String toSend = received + "World!";
-        output.writeUTF(toSend);
-        log("client <- server: "+ toSend);
+           // 클라이언트로부터 문자 받기
+           String received = input.readUTF();
+           log("client -> server: "+ received);
+
+           // 클라이언트 종료시 서버도 함꼐 종료
+           if(received.equals("exit")){
+               break;
+           }
+
+           // 클라이언트에게 문자 보내기
+           String toSend = received + " World!";
+           output.writeUTF(toSend);
+           log("client <- server: "+ toSend);
+       }
 
 
 
