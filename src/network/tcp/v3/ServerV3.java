@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.StreamCorruptedException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 import static util.MyLogger.log;
 
@@ -17,15 +18,14 @@ public class ServerV3 {
         ServerSocket serverSocket = new ServerSocket(PORT);
         log("서버 소켓 시작 - 리스닝 포트: "+ PORT);
 
+        while(true){
+            Socket  socket = serverSocket.accept();
+            log("소캣 연결: "+ socket);
 
+            SessionV3 session = new SessionV3(socket);
+            Thread thread = new Thread(session);
+            thread.start();
+        }
 
-
-
-        // 자원 정리
-        log("연결 종료: "+socket);
-        input.close();
-        output.close();
-        socket.close();
-        serverSocket.close();
     }
 }
