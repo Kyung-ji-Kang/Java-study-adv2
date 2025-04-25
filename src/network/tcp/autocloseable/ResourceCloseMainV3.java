@@ -30,12 +30,23 @@ public class ResourceCloseMainV3 {
         }catch(CallException e){
             System.out.println("ex: "+ e);
             throw e;
-        }finally{
+        }
+        finally{
             if (resource2 != null){
-                resource2.closeEx();
+                try{
+                    resource2.closeEx();
+                }catch (CloseException e){
+                    // close()에서 발생한 예외는 버린다. 필요하면 로깅 정도
+                    System.out.println("close ex: "+e);
+                }
             }
             if (resource1 != null){
-                resource1.closeEx();
+                try{
+                    resource1.closeEx();
+
+                }catch(CloseException e){
+                    System.out.println("close ex: "+ e);
+                }
             }
 
         }
