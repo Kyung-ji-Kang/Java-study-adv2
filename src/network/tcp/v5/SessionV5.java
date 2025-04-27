@@ -1,30 +1,28 @@
-package network.tcp.v4;
-
-import network.tcp.SocketCloseUtil;
+package network.tcp.v5;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import static network.tcp.SocketCloseUtil.*;
+
 import static util.MyLogger.log;
 
-public class SessionV4 implements Runnable{
+public class SessionV5 implements Runnable{
 
     private final Socket socket;
-    DataInputStream input = null;
-    DataOutputStream output = null;
-    public SessionV4(Socket socket) {
+
+    public SessionV5(Socket socket) {
         this.socket = socket;
     }
 
 
     @Override
     public void run() {
-        try {
-             input = new DataInputStream(socket.getInputStream());
-             output = new DataOutputStream(socket.getOutputStream());
+        try (socket;
+             DataInputStream input = new DataInputStream(socket.getInputStream());
+             DataOutputStream output = new DataOutputStream(socket.getOutputStream());){
+
 
             while (true){
 
@@ -47,10 +45,8 @@ public class SessionV4 implements Runnable{
         } catch (IOException e) {
             log(e);
         }
-        finally {
-            closeAll(socket,input,output);
-            log("연결 종료: " + socket);
-        }
+
+        log("연결 종료: "+socket+"isClosed: "+ socket.isClosed());
     }
 
 

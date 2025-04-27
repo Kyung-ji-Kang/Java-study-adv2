@@ -9,7 +9,7 @@ import static util.MyLogger.log;
 
 public class SocketCloseUtil {
 
-    public static void claseAll(Socket socket, InputStream input, OutputStream output){
+    public static void closeAll(Socket socket, InputStream input, OutputStream output){
 
         close(output);
         close(input);
