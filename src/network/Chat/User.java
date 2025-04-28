@@ -2,11 +2,9 @@ package network.Chat;
 
 public class User {
 
-    private String name;
+    private String name = "익명";
 
-    public User(String name) {
-        this.name = name;
-    }
+
 
     public void setName(String name) {
         this.name = name;

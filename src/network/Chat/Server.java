@@ -9,11 +9,12 @@ import static util.MyLogger.log;
 public class Server {
 
     private static final int PORT = 12345;
-    private static  int USER_COUNT = 0;
+    public static  int USER_COUNT = 0;
 
     public static void main(String[] args) throws IOException {
 
         ServerSocket serverSocket = new ServerSocket(PORT);
+        SessionManager sessionmanager = new SessionManager();
         log("서버 소캣 오픈 완료"+serverSocket);
 
         while(true){
@@ -23,12 +24,14 @@ public class Server {
             log("소캣 연결"+ socket+"\n현재 유저수: "+USER_COUNT +"명");
 
             //
-            Session session = new Session(socket);
+            Session session = new Session(socket,sessionmanager);
             Thread thread = new Thread(session);
             thread.start();
 
+
         }
 
-
     }
+
+
 }
