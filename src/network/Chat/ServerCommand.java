@@ -6,49 +6,82 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Scanner;
 
+import static util.MyLogger.log;
+
 public class ServerCommand {
     Scanner sc = new Scanner(System.in);
 
     private User user;
     private Socket socket;
-    DataInputStream input ;
-    DataOutputStream output ;
+    private DataInputStream input ;
+    private DataOutputStream output ;
+    Session session;
+    SessionManager sessionManager;
 
-    public ServerCommand( Socket socket) throws IOException {
+    public ServerCommand( Socket socket, Session session,DataInputStream input, DataOutputStream output,SessionManager sessionManager) throws IOException {
         this.socket = socket;
         this.user = new User();
-        this.input = new DataInputStream(socket.getInputStream());
-        this.output = new DataOutputStream(socket.getOutputStream());
+        this.input = input;
+        this.output = output;
+        this.session = session;
+        this.sessionManager = sessionManager;
+        sessionManager.add(session);
+
     }
 
-    //입장
-    public void join(String[] parts) throws IOException {
+    public void parsing(String receive) throws IOException {
+        String[] parts = receive.split(" ",2);
         String command = parts[0];
-        String name = parts[1];
+        String message =  parts[1];
+        if(!(command.equals("user")||command.equals("exit"))){
+
+        }
+
+        switch (command){
+            case("/join"):    join(message);       break;
+            case("/message"): message(message);    break;
+            case("/change"):  change(message);     break;
+            case("/users"):     users();           break;
+            case("/exit"):                         break;
+
+            default:
+                System.out.println("명령어를 다시 입력해주세요"); break;
+        }
+    }
+
+
+    //입장
+    public void join(String message) throws IOException {
+        String name = message;
         user.setName(name);
+        log(name+"님 입장 완료");
+        output.writeUTF(name+"님이 입장하였습니다");
     }
 
     //메시지
-    public void message(String[] parts,String message) throws IOException {
-        String command = parts[0];
-        output.writeUTF(user.getName()+" : " +message);
+    public void message(String message) throws IOException {
+        sessionManager.broadCast(message);
     }
 
     //이름 변경
-    public void change(String[] parts, String name) throws IOException {
-        String command = parts[0];
+    public void change(String message) throws IOException {
         String beforename = user.getName();
-        user.setName(name);
-        output.writeUTF(beforename+"님이 "+name+" 으로 이름을 변경하였습니다.");
+        user.setName(message);
+        log(beforename+"님이 "+ user.getName()+" 으로 이름을 변경하였습니다.");
+        output.writeUTF(beforename+"님이 "+ user.getName()+" 으로 이름을 변경하였습니다.");
     }
 
     //전체 사용자
-    public void users(String[] parts){
-
+    public void users() throws IOException {
+        sessionManager.listAll();
     }
 
 
     public void exit() throws IOException {
 
+    }
+
+    public String get_name(){
+        return  user.getName();
     }
 }

@@ -10,11 +10,12 @@ public class Server {
 
     private static final int PORT = 12345;
     public static  int USER_COUNT = 0;
+    private static SessionManager sessionmanager = new SessionManager();
 
     public static void main(String[] args) throws IOException {
 
         ServerSocket serverSocket = new ServerSocket(PORT);
-        SessionManager sessionmanager = new SessionManager();
+
         log("서버 소캣 오픈 완료"+serverSocket);
 
         while(true){

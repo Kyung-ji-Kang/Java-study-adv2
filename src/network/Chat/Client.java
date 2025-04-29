@@ -23,14 +23,34 @@ public class Client {
 
         Scanner sc = new Scanner(System.in);
 
+        Thread listener  = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while(true){
+                        String receive_broadcast= input.readUTF();
+                        log(receive_broadcast);
+                    }
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        listener.start();
+
         while(true){
-            System.out.print("명령어를 입력하시오");
+            System.out.print("명령어를 입력하시오: ");
             String message = sc.nextLine();
 
             output.writeUTF(message);
+
             if(isExit(message)){
                 break;
             }
+            String servermessage = input.readUTF();
+            log("Server -> client ; "+servermessage);
             /*
             String[] parts = message.split(" ",2);
             String command = parts[0];

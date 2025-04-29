@@ -11,21 +11,19 @@ import static util.MyLogger.log;
 
 public class Session implements Runnable{
 
-    //세선 매니저
-    private SessionManager sessionManager;
-
     private final Socket socket;
-
     private final DataInputStream input;
     private final DataOutputStream output;
+    private final ServerCommand servercommand;
+    private final SessionManager sessionManager;
 
-
-    public Session(Socket socket,SessionManager sessionManager) throws IOException {
+    public Session(Socket socket, SessionManager sessionManager ) throws IOException {
         this.socket = socket;
         this.input = new DataInputStream(socket.getInputStream());
         this.output = new DataOutputStream(socket.getOutputStream());
         this.sessionManager = sessionManager;
-        sessionManager.add(this);
+        this.servercommand = new ServerCommand(socket,this,this.input,this.output,sessionManager);
+
     }
 
     @Override
@@ -33,22 +31,9 @@ public class Session implements Runnable{
        while(true){
            try{
                String receive = input.readUTF();
-               String[] parts = receive.split(" ",2);
-
-               String command = parts[0];
-               String mseeage =  parts[1];
-
-               log("client -> server : "+command);
-               switch (command){
-                   case("/join"):       break;
-                   case("/message"):    break;
-                   case("/change"):     break;
-                   case("/users"):      break;
-                   case("/exit"):       break;
-               }
-
-               //
-               output.writeUTF(receive);
+               log("client -> server : "+receive);
+               servercommand.parsing(receive); //파싱
+//               output.writeUTF(receive);
 
 
            } catch (IOException e) {
@@ -56,13 +41,23 @@ public class Session implements Runnable{
            }
        }
 
-        try {
+        /*try {
             input.close();
             output.close();
             socket.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
-        }
+        }*/
 
     }
+
+    public String get_name(){
+        return servercommand.get_name();
+    }
+
+    public void SendMessage(String message) throws IOException {
+        output.writeUTF(message);
+    }
+
+
 }
