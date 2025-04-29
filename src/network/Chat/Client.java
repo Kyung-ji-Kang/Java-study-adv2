@@ -26,7 +26,7 @@ public class Client {
         Scanner sc = new Scanner(System.in);
 
 
-
+        //메세지를 받는 리스터 스레드
         Thread listener  = new Thread(new Runnable() {
             @Override
             public void run() {
