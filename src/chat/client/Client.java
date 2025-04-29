@@ -35,7 +35,7 @@ public class Client {
 
         readHandler = new ReadHandler(input, this);
         writeHandler = new WriteHandler(output, this);
-        Thread readthread = new Thread(readHandler, "readHander");
+        Thread readthread = new Thread(readHandler, "readHandler");
         Thread writethread = new Thread(writeHandler, "writeHandler");
         readthread.start();
         writethread.start();

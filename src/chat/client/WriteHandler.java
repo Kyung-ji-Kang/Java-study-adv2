@@ -16,8 +16,8 @@ public class WriteHandler implements  Runnable{
 
     private boolean closed = false;
 
-    public WriteHandler(DataOutputStream outputStream, Client client) {
-        this.output = outputStream;
+    public WriteHandler(DataOutputStream output, Client client) {
+        this.output = output;
         this.client = client;
     }
 
@@ -32,7 +32,6 @@ public class WriteHandler implements  Runnable{
             while(true){
 
                 String toSend = sc.nextLine(); // 블로킹
-
                 if(toSend.isEmpty()){
                     continue;
                 }
@@ -59,7 +58,7 @@ public class WriteHandler implements  Runnable{
     }
 
     private String inputUsername(Scanner sc) throws IOException {
-        System.out.println("이름을 입력하세요");
+        System.out.println("이름을 입력하세요: ");
         String username;
         do{
             username = sc.nextLine();
