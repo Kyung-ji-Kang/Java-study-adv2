@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SessionManager {
@@ -18,10 +19,15 @@ public class SessionManager {
         sessions.remove(session);
     }
 
-    public synchronized void listAll() throws IOException {
+    public synchronized void UserAll() throws IOException {
+        ArrayList<String> users = new ArrayList<>();
+
         for(Session session:sessions){
-            session.SendMessage(session.get_name());
+            String name = session.get_name();
+            users.add(name);
         }
+        String  userlist = users.toString();
+        broadCast(userlist);
     }
 
     public synchronized void broadCast(String message) throws IOException {

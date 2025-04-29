@@ -73,7 +73,7 @@ public class ServerCommand {
 
     //전체 사용자
     public void users() throws IOException {
-        sessionManager.listAll();
+        sessionManager.UserAll();
     }
 
 

@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import static util.MyLogger.log;
 
@@ -23,13 +25,18 @@ public class Client {
 
         Scanner sc = new Scanner(System.in);
 
+
+
         Thread listener  = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     while(true){
-                        String receive_broadcast= input.readUTF();
-                        log(receive_broadcast);
+                        String in = input.readUTF();
+                        System.out.println();
+                        log(in);
+                        System.out.print("명령어를 입력하시오: ");
+
                     }
 
                 } catch (IOException e) {
@@ -41,32 +48,13 @@ public class Client {
         listener.start();
 
         while(true){
-            System.out.print("명령어를 입력하시오: ");
             String message = sc.nextLine();
-
             output.writeUTF(message);
-
+            System.out.println();
             if(isExit(message)){
                 break;
             }
-            String servermessage = input.readUTF();
-            log("Server -> client ; "+servermessage);
-            /*
-            String[] parts = message.split(" ",2);
-            String command = parts[0];
-            String value = parts[1];
 
-            switch (command){
-                case("/join"): clientUser.join(parts); break;
-                case("/message"): clientUser.message(parts); break;
-                case("/change"): clientUser.change(parts); break;
-                case("/users"):
-                //case("/exit"): clientUser.exit(); break;
-                default:{
-                    System.out.println("다시 입력해주시기 바랍니다");
-                }
-
-            }*/
         }
 
         input.close();
