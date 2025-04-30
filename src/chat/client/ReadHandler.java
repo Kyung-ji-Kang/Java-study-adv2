@@ -19,16 +19,17 @@ public class ReadHandler implements  Runnable{
     @Override
     public void run() {
 
-        while (true){
-            try {
+        try {
+            while (true){
                 String received = input.readUTF();
                 System.out.println(received);
-            } catch (IOException e) {
-                log(e);
-            }finally {
-                client.close();
             }
+        } catch (IOException e) {
+            log(e);
+        }finally {
+            client.close();
         }
+
 
     }
 
