@@ -30,7 +30,6 @@ public class WriteHandler implements  Runnable{
             output.writeUTF("/join"+ DELIMITER+username);
 
             while(true){
-
                 String toSend = sc.nextLine(); // 블로킹
                 if(toSend.isEmpty()){
                     continue;
