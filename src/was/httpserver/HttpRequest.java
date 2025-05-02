@@ -1,9 +1,8 @@
-package was;
+package was.httpserver;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +16,7 @@ public class HttpRequest {
     private final Map<String, String> headers = new HashMap<>();
 
     public HttpRequest(BufferedReader reader) throws IOException {
-        parserRequest(reader);
+        parseRequestLine(reader);
         parseHeaders(reader);
         // 메세지 바디는 이후에 처리
 
@@ -27,7 +26,7 @@ public class HttpRequest {
     // HOST: localhost:123456
     private void parseRequestLine(BufferedReader reader) throws IOException{
         String requestLine = reader.readLine();
-        if(requestLine != null){
+        if(requestLine == null){
             throw new IOException("EOF: No request line recevied");
         }
         String[] parts = requestLine.split(" ");
