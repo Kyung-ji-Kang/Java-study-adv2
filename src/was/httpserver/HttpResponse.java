@@ -18,9 +18,6 @@ public class HttpResponse {
         this.statusCode = statusCode;
     }
 
-    public void setContentType(String contentType){
-        this.contentType = contentType;
-    }
 
     public void writeBody(String  body){
         bodyBuilder.append(body);
